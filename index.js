@@ -54,6 +54,7 @@ module.exports = function timeout(ms, options) {
     res.writeHead = function(){
       clearTimeout(id);
       writeHead.apply(res, arguments);
+      writeHead = null;
     }
 
     next();
