@@ -39,7 +39,6 @@ module.exports = function timeout(time, options) {
     var id = setTimeout(function(){
       req.timedout = true;
       req.emit('timeout', time);
-      req = null;
     }, time);
 
     if (respond) {
@@ -48,17 +47,20 @@ module.exports = function timeout(time, options) {
 
     req.clearTimeout = function(){
       clearTimeout(id);
+      destroy = null;
     };
 
     req.socket.destroy = function(){
       clearTimeout(id);
       destroy.call(this);
+      destroy = null;
     };
 
     req.timedout = false;
 
     onHeaders(res, function(){
       clearTimeout(id);
+      destroy = null;
     });
 
     next();
