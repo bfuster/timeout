@@ -39,6 +39,7 @@ module.exports = function timeout(time, options) {
     var id = setTimeout(function(){
       req.timedout = true;
       req.emit('timeout', time);
+      req = null;
     }, time);
 
     if (respond) {
